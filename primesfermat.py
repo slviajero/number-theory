@@ -1,3 +1,13 @@
+# solves the problem of finding all possible a,c that solve 
+# a**2 + b**2 = c**2 for a given b
+#
+# method is to rewrite the equation as c**2 - a**2 = (c-a)(c+a) = b**2
+# from here one can find the prime factors of b and distribute them in all possible ways to generate the 
+# two integers (c-a) and (c+a) 
+# then one solves for c and a. 
+#
+# this was just a playground to to combinatorics with all kind of data structures in python 
+
 # static for now
 primes = [ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
 
