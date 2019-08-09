@@ -84,21 +84,4 @@ for s in sol:
 		print("Pseudo solution = ", a,b,c,circ)
 
 
-
-
-
-
-
-
-
-
-
-
-
-		
-
-
-
-
-
-
+# this is still not good
