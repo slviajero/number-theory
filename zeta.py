@@ -1,25 +1,11 @@
 import math
+import primestuff
 
 #
 # Playing around with the Riemand zeta function 
 #
 
-primes=[2]
-
-#
-# get more primes: generates a list of primes from the initial 
-# list containing only the number 2
-#
-
-for c in range(3, 100000):
-	limit=int(math.sqrt(c))
-	for p in primes:
-		if ( (c%p)==0):
-			break
-		if (p>limit):
-			primes.append(c)
-			break
-
+primes=primestuff.getprimes(10000)
 print("Number of primes:", len(primes))
 
 # the zeta function for s real and s>1 summing up the integers

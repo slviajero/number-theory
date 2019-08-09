@@ -1,3 +1,5 @@
+import primestuff
+
 # solves the problem of finding all possible a,c that solve 
 # a**2 + b**2 = c**2 for a given b
 #
@@ -9,20 +11,11 @@
 # this was just a playground to to combinatorics with all kind of data structures in python 
 
 # static for now
-primes = [ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+primes = primestuff.getprimes(1000)
 
 # factorize an integer n
 def factor(n):
-	f=[]	
-	for prime in primes:
-		if n <= 1:
-			return f
-		while (n % prime == 0):
-			n = int(n / prime)
-			f.append(prime)
-	if ( n > 1):
-		f.append(n)
-	return f
+	return primestuff.factor(n, primes)
 
 # order (=number of factors in the second part) of the tuple
 def tupleorder(tuple):

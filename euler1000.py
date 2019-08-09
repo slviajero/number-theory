@@ -1,4 +1,5 @@
 import math
+import primestuff
 
 #
 # Euler problem inspired
@@ -23,14 +24,7 @@ import math
 # a very elementary euklid algorithm 
 
 def euklid(i,j):
-	if ((i==1) or (j==1)):
-		return 1;
-	if (j==i):
-		return j;
-	if (j>i):
-		return euklid(j-i,i)
-	else: 
-		return euklid(i-j,j)
+	return primestuff.euklid(i,j)
 
 # upper bound  
 k=1000

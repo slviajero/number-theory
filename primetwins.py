@@ -1,4 +1,5 @@
 import math
+import primestuff
 
 #
 # Playing around with twins 
@@ -10,21 +11,8 @@ import math
 
 # we know that the first prime is 2 
 
-primes=[2]
+primes=primestuff.getprimes(10000)
 twins=[]
-
-#
-# get more primes, we start with 3 and use the fact that we only have to work with prime factors up to sqrt(c)
-#
-for c in range(3, 10000):
-	limit=int(math.sqrt(c))
-	for p in primes:
-		if ( (c%p)==0):
-			break
-		if (p>limit):
-			primes.append(c)
-			break
-
 print("Number of primes:", len(primes))
 
 #
