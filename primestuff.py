@@ -20,6 +20,19 @@ def getprimes(n):
 	return primes
 
 #
+# this function determines if a number is prime relative to the 
+# list of primes that is given to it, if no number from primes 
+# divides n the function returns true. If n is smaller than 
+# max(primes)**2 it is prime in the strict sense
+#
+
+def isprime(n, primes):
+	for p in primes:
+		if((n%p)==0):
+			return False
+	return True
+
+#
 # factorize an integer n based on the list of primes supplied in the argument
 # the function does not find all factors but just the ones in the list
 #

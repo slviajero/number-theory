@@ -1,25 +1,25 @@
+import primestuff
+
 #
 # playing around with pairs again, there are theorems about
 # reciprocals that can be tested
 #
+# the sum of the reciprocals of primes converges to B_2
+# the Brun's number which is known from scanning 10**16 pairs 
+# to be close to 1.902160583104
+#
 
 #
-# get primes until 1000
+# get primes until 1000 
+# these numbers are used to divide the candidates at the second stage of the program
 #
 base_value=1000
-primes=[2]
-for number in range(3,base_value):
-	is_prime=True
-	for p in primes:
-		if number % p == 0:
-			is_prime=False
-			break
-	if is_prime:
-		primes.append(number)
+stage2=True
 
-#
-# get prime number pairs
-#
+primes=primestuff.getprimes(base_value)
+
+
+# stage 1, get the pairs in the first set of numbers
 	
 pairs=[]
 for i in range(0,len(primes)-1):
@@ -27,32 +27,33 @@ for i in range(0,len(primes)-1):
 		pair=(primes[i], primes[i+1])
 		pairs.append(pair)
 
+# stage 2 go beyond base_value using that prime twin pairs need to 
+# be of the form 6n-1, 6n+1. As we know the primes up to base value 
+# we can now test for primes up to base_value**2
+
+if (stage2):
+	for i in range(int(base_value/6), int(base_value**2/6)):
+		c1=6*i-1
+		c2=6*i+1
+		if primestuff.isprime(c1,primes) and primestuff.isprime(c2,primes):
+			pairs.append((c1, c2))
+
+
+print(pairs)
 #
 # the ratio of pairs in the entire range to 1000
 #
-print("Number of pairs in the interval", base_value, len(pairs)/base_value)
+print("Number of pairs in the interval", base_value**2, len(pairs))
 
-#
-# generate the distances, the reciprocals and the sum of them
-#
 
-distances=[]
-average_distances=[]
-sum_of_distance=0
-sum_of_reci=0
-for i in range(0,len(pairs)-1):
-	pair1=pairs[i]
-	pair2=pairs[i+1]
-	distance=pair2[0]-pair1[0]
-	reci=1/pair1[0]+1/pair1[1]
-	distances.append(distance)
-	sum_of_distance=distance+sum_of_distance
-	sum_of_reci=reci+sum_of_reci
-	print("The sum of the reciprocals of pairs in the range", i, sum_of_reci)
-	average_distances.append(sum_of_distance/(i+1))
+def b2(p):
+	r=0
+	for i in range(0,len(p)-1):
+		p1=p[i][0]
+		p2=p[i+1][1]
+		r=r+1/p1+1/p2
+	return r
 
-#
-# unfinished work, things to come
-#
+print(b2(pairs))
 
 
