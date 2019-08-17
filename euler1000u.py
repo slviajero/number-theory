@@ -1,4 +1,5 @@
-import math
+from math import sqrt
+from primestuff import *
 
 #
 # Euler problem inspired
@@ -11,7 +12,7 @@ import math
 # b=2mn
 # c=n**2+m**2
 #
-# primitive only if n,m coprime and one of them even the other odd
+# primitive only if n,m coprime and one of them even the other odd 
 # 
 # for any give k the equation a+b+c=k yields 
 #
@@ -21,70 +22,100 @@ import math
 # the diophanian equation k=2*n*(n+m) with the additional condition 
 # n>m as we want a>0. Renaming u=k/2 we solve u=n(m+n)
 #
+# (0) k has to be even
+# (1) we use that the maximum n has to be smaller then sqrt(u)
+# (2) m<n 
+# (3) n must divide u to solve the equation
+# (4) n+m must divide u
+#
 
-# upper bound 
+debug=False
+primes=Primer(2000)
 
-k=4002
+def eulerf(k):
 
-if (k%2 != 0):
-	print("Diameter not even, no solution. Using Diameter=", k-1)
-	k=k-1
+# condition (0) k must be even, for odd numbers there is no solution
 
-u=int(k/2)
+	if odd(k):
+		return []
 
-# maximum n
+	u=k//2
 
-#nmax=int(u**(1/2))
-nmax=u
-print("Maximum n=", nmax)
+# condition (1) maximum n is sqrt(k/2) 
 
-# walk through the range on possible n's from 
-# above and check first if n divides u
+	nmax=int(sqrt(u))
 
-nlist=[]
+# condition (3)
+# walk through the range on possible n's 
+# and check first if n divides u, create a list of these candidates
 
-for n in range(nmax,1,-1):
-	if (u%n == 0):
-		nlist.append(n)
+	nlist=[]
+	for n in range(1,nmax+1):
+		if divisible(u,n):
+			nlist.append(n)
 
-# the possible candidates for n are
+# check condition (2) and (4) now 
+# all possible m must be <n and (n+m) must dived u
 
-print(nlist)
-
-# check the second condition now for (n+m) all possible 
-# m must be <n and (n+m) must dived u
-
-sol=[]
-
-for n in nlist: 
-	for m in range(n-1,0,-1):
-		print("Testing", n,m)
-		if ( u%(n+m) == 0):
-			sol.append((n,m))
-
-# all solutions that satisfy the conditions of divisibility
-# sol will contain more than one tuple even if there is only 
-# one solution. Until now we have only tested divisibility 
-# and non primitive solutions will appear together with their 
-# primitive counterparts, also other noninter multiples seem 
-# to appear
-
-print(sol)
-
-for s in sol:
-	n=s[0]
-	m=s[1]
-	a=n**2-m**2
-	b=2*n*m
-	c=n**2+m**2
-	circ=a+b+c
-	if (circ == k): 
-		print("Solution = ",a,b,c,circ)
-	else:
-		print("Pseudo solution = ", a,b,c,circ)
+	sol=[]
+	for n in nlist: 
+		for m in range(1,n):
+			if divisible(u,n+m):
+				sol.append((n,m))
 
 
-# this is still not good
-# another test of this
-# and yet another after move
+# reduce the list further by asserting that n,m are coprime
+# and one of them is even
+# this yields only primitive solutions
+
+	sol2=[]
+	for t in sol:
+		if coprime(t[0], t[1]):
+			if even(t[0]) or even(t[1]):
+				sol2.append(t)
+
+
+# sol2 contains now all solutions that satisfy the congruences, 
+# and that a>0, and that a,b,c are primitive
+
+# now we construct the actual solutions and make sure that 
+# they are scaled to the right k
+
+	sol3=[]
+	for s in sol2:
+		n=s[0]
+		m=s[1]
+		a=n**2-m**2
+		b=2*n*m
+		c=n**2+m**2
+		circ=a+b+c
+		if (a>b):
+			ap=a
+			a=b
+			b=ap
+		f=int(k/circ)
+		sol3.append((a*f, b*f, c*f))
+
+	if debug and sol3==[]:
+		print(k//2, nmax, nlist)
+		print(primes.factor(k//2))
+		print(sol3)
+
+	return sol3
+
+def checksolution(t):
+	a=t[0]
+	b=t[1]
+	c=t[2]
+	print(a*a+b*b, c*c)
+	print(a+b+c)
+
+#
+# walk through solutions
+#
+
+for i in range(100,200,2):
+	e=eulerf(i)
+	print(i,e)
+	
 
