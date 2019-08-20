@@ -30,7 +30,8 @@ from primestuff import *
 #
 
 debug=False
-primes=Primer(2000)
+if debug:
+	primes=Primer(2000)
 
 def eulerf(k):
 
@@ -114,8 +115,7 @@ def checksolution(t):
 # walk through solutions
 #
 
-for i in range(100,200,2):
-	e=eulerf(i)
-	print(i,e)
+k=1000
+print(eulerf(k))
 	
 
