@@ -9,6 +9,8 @@ from time import perf_counter
 ap = argparse.ArgumentParser()
 ap.add_argument("-k", "--sum", required=False, default=1000, 
 	help="sum a+b+c")
+ap.add_argument("-r", "--range", required=False, default=0, 
+	help="range of values to be checked after k")
 ap.add_argument("-e", "--explain", required=False, default=False, action="store_true",
 	help="explain the solution")
 ap.add_argument("-m", "--math", required=False, default=False, action="store_true",
@@ -22,6 +24,7 @@ k=int(args['sum'])
 explain=args['explain']
 math=args['math']
 measure_time=args['time']
+r=int(args['range'])
 
 #
 # explainers - function that explain the result if desired
@@ -217,10 +220,21 @@ def eulerf(k):
 # calculate and measure the execution time
 #
 
-cl=perf_counter()
-result=eulerf(k)
-cl=perf_counter()-cl
-print(k, result)
+if r==0:
+	# calculate just one value
+	cl=perf_counter()
+	result=eulerf(k)
+	cl=perf_counter()-cl
+	print(k, result)
+else:
+	cl=perf_counter()
+	results=[]
+	for i in range(k,k+r):
+		results.append((i,eulerf(i)))
+	cl=perf_counter()-cl	
+	for result in results:
+		if result[1]!=[]:
+			print(result[0], result[1])
 
 if (measure_time):
 	print("Execution time {} microseconds".format(int((cl)*1000000))) 
