@@ -209,7 +209,7 @@ def eulerf(k):
 			ap=a
 			a=b
 			b=ap
-		f=int(k/circ)
+		f=k//circ
 		if explain: 
 			print(explain_solution(s, a, b, c, f))
 		sol3.append((a*f, b*f, c*f))
