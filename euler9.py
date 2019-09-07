@@ -98,7 +98,7 @@ def explain_solution(s, a, b, c, f):
 	"Pair (n,m) {} \n"\
 	"Leads to the primitive triple {} \n"\
 	"Multiplying by {} \n"\
-	"Leads to the solution {} \n".format(s, (a, b, b), f, (a*f, b*f, c*f))
+	"Leads to the solution {} \n".format(s, (a, b, c), f, (a*f, b*f, c*f))
 	return explaintext
 
 #
