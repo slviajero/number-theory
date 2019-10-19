@@ -58,6 +58,21 @@ class Primer():
 			return self.primes[:n]
 
 #
+# get the list of primes currently used either in total
+# or until a certain limit
+#
+	def until(self, n):
+		if n>self.primes[-1]:
+			self.getprimes(n+1)
+		result=[]
+		for p in self.primes:
+			if p<=n:
+				result.append(p)
+			else: 
+				break
+		return result
+
+#
 # how many primes do we have in total
 # or up to a certain limit
 # len(p) is an integer variant of pi(x)

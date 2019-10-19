@@ -72,6 +72,21 @@ class Primer():
 	def __len__(self):
 		return len(self.primes)
 
+#
+# get the list of primes currently used either in total
+# or until a certain limit
+#
+	def until(self, n):
+		if n>self.primes[-1]:
+			self.getprimes(n+1)
+		result=[]
+		for p in self.primes:
+			if p<=n:
+				result.append(p)
+			else: 
+				break
+		return result
+
 	# the maximum prime number we know for now
 	def max(self):
 		return self.primes[-1]
