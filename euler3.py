@@ -2,7 +2,7 @@ from primes2 import Primer
 
 p=Primer()
 
-f=p.factors(600851475143)
+f=p.factor(600851475143)
 
 print(f)
 
