@@ -1,9 +1,12 @@
-from math import sqrt
+from math import sqrt, log
 from time import perf_counter
 
 #
 # A class that generates a prime number calculator, stores a list of 
 # primes and does things with them
+#
+# Literatur:
+#	https://primes.utm.edu/howmany.html
 #
 
 class Primer():
@@ -14,6 +17,7 @@ class Primer():
 	def __init__(self, maxprime=1000, debug=False):	
 		self.primes=[2, 3]
 		self.debug=debug
+		self.index=0
 		if maxprime>2:
 			self.getprimes(maxprime)
 		# safety net for dynamic next
@@ -44,6 +48,30 @@ class Primer():
 			print("Having {} primes until {}".format(len(self.primes), self.primes[-1]))
 
 #
+# like getprimes but n isn't the maximum prime number but the 
+# number of prime numbers to be generated
+#
+
+
+	def getprimes2(self, n):
+	
+		nmax=len(self.primes)
+
+		# we have already all we need
+		if (n<=nmax):
+			return
+		
+		if self.debug:
+			print("Having {} primes until maximum {}. Getting primes until {}".format(len(self.primes),pmax,n))
+		
+		# Using the next function to find all the next primes until n
+		while len(self.primes)<n:
+			self.next()
+
+		if self.debug:
+			print("Having {} primes until {}".format(len(self.primes), self.primes[-1]))
+
+#
 # get the list of primes currently used either in total
 # or until a certain limit
 #
@@ -54,10 +82,25 @@ class Primer():
 			return self.primes[:n]
 
 #
+# get the nth prime from the list - just to avoid the off by one
+#
+
+	def prime(self, n):
+
+		if n<1:
+			raise ValueError
+		if n>len(self.primes):
+			self.getprimes2(n)
+
+		return self.primes[n-1]
+
+
+#
 # how many primes do we have in total
 # or up to a certain limit
 # len(p) is an integer variant of pi(x)
 #
+
 	def len(self, pmax=0):
 		if (pmax==0):
 			return len(self.primes)
@@ -103,10 +146,13 @@ class Primer():
 			self.index+=1
 			return p
 
-	# get the next prime, we start from a list of known primes and 
-	# take the maximum plus 2 and divide until we exceed the sqrt
-	# we know that the candidate has to be prime if none of the smaller
-	# primes divide it 
+#
+# get the next prime, we start from a list of known primes and 
+# take the maximum plus 2 and divide until we exceed the sqrt
+# we know that the candidate has to be prime if none of the smaller
+# primes divide it 
+#
+
 	def next(self):
 		i=self.max()
 		while True:
@@ -125,7 +171,10 @@ class Primer():
 # and then tries to factor the number 	
 #
 	def isprime(self, n):
-		#is it in the list -> good
+		n=abs(n)
+		if n==0:
+			return False
+		#is it in the list -> good		
 		if n in self.primes:
 			return True
 		else:
@@ -161,6 +210,7 @@ class Primer():
 #
 # Return a new factorizer with knowledge about our primes
 #
+
 	def getfactorizer(self, n):
 		f=Factorizer(n, self)
 		return f
@@ -169,6 +219,7 @@ class Primer():
 # a naive way to calculate zeta from the euler formula
 # we use primes up to a maximum pmax
 #
+
 	def zeta(self, s, pmax=0):
 		if (pmax==0):
 			pmax=self.max()
@@ -178,10 +229,41 @@ class Primer():
 				break
 			z=z/(1-p**(-s))
 		return z
+
+#
+# approximation of pi(x)
+#
+
+	def piapprox(self, x, a=1):
+		return x/(log(x)-a)
+
+#
+# pi as we know it
+#
+	
+	def pi(self, x, a=1):
+		if x<self.primes[-1]:
+			c=0
+			while (self.primes[c]<=x):
+				c+=1
+			return c
+		else:
+			return self.piapprox(x,a)
+
+#
+# Size approximation of the nth prime (Dussart) - lower bound
+#
+
+	def p(self, n):
+		est=n*(log(n)+log(log(n))-1)
+		est=est+n*(log(log(n))-2)/log(n)
+		return est
+
 #
 # number theory helper functions put inside the class
 # this could be used stand alone as well
 #
+
 	def euklid(self,i,j):
 		if (i<1 or j<1):
 			return 0
@@ -206,9 +288,11 @@ class Primer():
 
 	def even(self,n):
 		return self.divisible(n,2)
+
 #
 # Save the prime numbers generated to a file 
 #
+
 	def save(self, filename):
 		with open(filename,"w") as f:
 			for p in self.primes:
@@ -216,6 +300,7 @@ class Primer():
 #
 # load a list of prime numbers into the class - no health check!
 #
+
 	def load(self, filename):
 		with open(filename,"r") as f:
 			self.primes=[]
@@ -230,8 +315,8 @@ class Primer():
 
 class Factorizer: 
 
-	# a Factorizer either gets a primer (that stores all the primes)
-	# or it makes one
+# a Factorizer either gets a primer (that stores all the primes)
+# or it makes one
 
 	def __init__(self, n=1, primer=None):
 		if primer==None:
@@ -256,14 +341,11 @@ class Factorizer:
 
 		# in case we know the factors already
 		if self.done:
-			if self.__factors__==[]:
-				self.__factors__=self.factors[:]
 			if len(self.__factors__)>0:
 				return self.__factors__.pop(0)
 			else:
 				raise StopIteration
 			
-
 		# nothing to factorize any more
 		if self.a==1:
 			self.done=True
@@ -296,7 +378,12 @@ class Factorizer:
 		return p
 
 	def __iter__(self):
-		self.a=self.n
+		if self.done:
+			self.__factors__=self.factors[:]
+		else:
+			self.a=self.n
+			self.factors=[]
+			self.__factors__=[]
 		return self
 
 	def __len__(self):
@@ -306,10 +393,61 @@ class Factorizer:
 			i+=1
 		return i
 
+if __name__=="__main__":
 
+	print("Echo test cycle - creating an empty primer")
+	p=Primer()
 
+	print("Using it to test a number")
+	n=65537
+	print("Is {} prime? {}".format(n, p.isprime(n)))
 
+	print("Factorizing with a factorizer")
+	print("1008")
+	f=p.getfactorizer(1008)
+	for n in f:
+		print(n)
+	print("1005")
+	f.init(1005)
+	for n in f:
+		print(n)
+	print("1005 again from internal buffer")
+	i=iter(f)
+	next(i)
+	print("2nd factor", next(i))
+	i=iter(f)
+	print("1st factor", next(i))
 
+	print("Now 1003")
+	f.init(1003)
+	i=iter(f)
+	next(i)
+	print("First round")
+	for j in i:
+		print(j)
+	print("Second Round")
+	for j in i:
+		print(j)
 
+	print("Getting all primes until 150")
+	l=p.until(150)
+	print(l)
 
+	print("Getting all primes the primer know up to now")
+	l=p.list()
+	print(l)
+
+	p.getprimes(10000)
+	print("Now we have {} primes in storage.".format(len(p)))
+
+	print("Zeta of 2 from {} primes is {}".format(len(p), p.zeta(2)))
+	print("Zeta of 2 from {} primes is {}".format(100, p.zeta(2,100)))
+
+	print("The number of primes until 1000000 is approximately {} ".format(p.pi(100000)))
+
+	print("The 1 millionth prime is approximately {}".format(p.p(1000000)))
+
+	print("We have {} primes but need 2500. Using getprime2! ".format(len(p)))
+	p.getprimes2(2500)
+	print("Now we have {} primes in storage.".format(len(p)))
 
