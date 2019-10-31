@@ -1,4 +1,8 @@
-from primes2 import Primer
+from primes import Primer
+
+#
+# Solution of Euler 7 
+#
 
 p=Primer()
 n=len(p)
@@ -12,3 +16,4 @@ print(p.primes[10000])
 
 list=p.until(200)
 print(list)
+
