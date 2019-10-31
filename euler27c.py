@@ -9,7 +9,8 @@ from primes import Primer
 
 class EulerPolynomial(Primer):
 
-	def __init__(self, a=1, b=41):
+	def __init__(self, a=1, b=41, debug=False):
+		self.debug_e=debug
 		self.a=a
 		self.b=b
 		self.pprimes=[]
@@ -20,11 +21,15 @@ class EulerPolynomial(Primer):
 		return n*n+self.a*n+self.b
 
 	def new(self, a, b, unique=True):
+		if (self.debug_e):
+			print("New called for a= {}, b= {}".format(a, b))
 		self.a=a
 		self.b=b
 		return self.deg(unique)
 
 	def deg(self, unique=True):
+		if (self.debug_e):
+			print("Degree called for a= {}, b= {}".format(self.a, self.b))
 		i=0
 		primes=[]
 		while (True):
@@ -46,17 +51,19 @@ class EulerPolynomial(Primer):
 #
 # limit
 #
-limit=2500
+
+limit=250
 
 #
 # basic Euler Polynomial class
 #
 
-e=EulerPolynomial()
+e=EulerPolynomial(1, 41, False)
 
 #
 # we only scan b that are prime because any polynomial with a nonprime b has degree 0
 #
+
 tlist=e.until(limit)
 blist=[]
 for b in tlist:
@@ -67,11 +74,15 @@ print("Produced {} candidates for b. ".format(len(blist)))
 
 result=[]
 
+print(blist)
+
 for b in blist: 
+
 #
 # if b is off, we can restrict a to odd numbers, otherwise evem
 # this solves the n=1 case because 1+b+a has either to be 2 or odd 
 #
+
 	if abs(b)!=2:
 		alist=range(-limit+1,limit,2)
 	else:

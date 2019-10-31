@@ -1,5 +1,5 @@
 import math
-import primestuff
+from primes import Primer
 
 #
 # Playing around with twins 
@@ -11,17 +11,17 @@ import primestuff
 
 # we know that the first prime is 2 
 
-primes=primestuff.getprimes(10000)
+primer=Primer(10000)
 twins=[]
-print("Number of primes:", len(primes))
+print("Number of primes:", len(primer))
 
 #
 # get the twins with a distance 2-50
 #
-for o in range(2,50,2):
+for o in range(2,10,2):
 	no=0
-	for p in primes:
-		if (p+o) in primes:
+	for p in primer:
+		if (p+o) in primer:
 			no=no+1
 	twins.append((o,no))
 		

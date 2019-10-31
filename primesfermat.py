@@ -1,4 +1,4 @@
-import primestuff
+from primes import Primer
 
 # solves the problem of finding all possible a,c that solve 
 # a**2 + b**2 = c**2 for a given b
@@ -11,11 +11,11 @@ import primestuff
 # this was just a playground to to combinatorics with all kind of data structures in python 
 
 # static for now
-primes = primestuff.getprimes(1000)
+primer = Primer(1000)
 
 # factorize an integer n
 def factor(n):
-	return primestuff.factor(n, primes)
+	return primer.factor(n)
 
 # order (=number of factors in the second part) of the tuple
 def tupleorder(tuple):

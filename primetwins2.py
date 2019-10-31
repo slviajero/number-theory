@@ -1,4 +1,4 @@
-import primestuff
+from primes import Primer
 
 #
 # playing around with pairs again, there are theorems about
@@ -13,18 +13,19 @@ import primestuff
 # get primes until 1000 
 # these numbers are used to divide the candidates at the second stage of the program
 #
-base_value=1000
+
+base_value=100
+debug=False
 stage2=True
 
-primes=primestuff.getprimes(base_value)
-
+primer=Primer(base_value)
 
 # stage 1, get the pairs in the first set of numbers
 	
 pairs=[]
-for i in range(0,len(primes)-1):
-	if (primes[i+1]-primes[i]) == 2:
-		pair=(primes[i], primes[i+1])
+for i in range(0,len(primer)-1):
+	if (primer.primes[i+1]-primer.primes[i]) == 2:
+		pair=(primer.primes[i], primer.primes[i+1])
 		pairs.append(pair)
 
 # stage 2 go beyond base_value using that prime twin pairs need to 
@@ -35,15 +36,16 @@ if (stage2):
 	for i in range(int(base_value/6), int(base_value**2/6)):
 		c1=6*i-1
 		c2=6*i+1
-		if primestuff.isprime(c1,primes) and primestuff.isprime(c2,primes):
+		if primer.isprime(c1) and primer.isprime(c2):
 			pairs.append((c1, c2))
 
+if debug:
+	print(pairs)
 
-print(pairs)
 #
 # the ratio of pairs in the entire range to 1000
 #
-print("Number of pairs in the interval", base_value**2, len(pairs))
+print("In the interval 2 - {} there are {} pairs".format(base_value**2, len(pairs)))
 
 
 def b2(p):
